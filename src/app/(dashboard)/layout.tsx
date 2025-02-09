@@ -5,6 +5,7 @@ import { Menu } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useAuthCheck } from "@/hooks/useAuthCheck";
 import { useRouter } from "next/navigation";
+import { useProfile } from "@/hooks/useProfile";
 
 // Loading component
 const LoadingSpinner = () => (
@@ -20,6 +21,7 @@ export default function DashboardLayout({
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const { isConnected, isLoading, address } = useAuthCheck();
+  const { hasProfile } = useProfile();
   const router = useRouter();
 
   useEffect(() => {
@@ -37,6 +39,15 @@ export default function DashboardLayout({
   // Chỉ render layout khi đã kết nối
   if (!isConnected) {
     return <LoadingSpinner />;
+  }
+
+  if (
+    isConnected &&
+    !hasProfile &&
+    !window.location.pathname.includes("/profile/")
+  ) {
+    router.push(`/profile/${address}`);
+    return <div>Redirecting to profile creation...</div>;
   }
 
   return (

@@ -9,8 +9,11 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
+// Kết hợp cấu hình mở rộng và cấu hình rules tùy chỉnh
+export default tseslintConfig({
+  // Mở rộng cấu hình từ Next.js (core-web-vitals và typescript)
   ...compat.extends("next/core-web-vitals", "next/typescript"),
-];
-
-export default eslintConfig;
+  rules: {
+    "@typescript-eslint/no-explicit-any": "no", // hoặc "off" nếu muốn tắt quy tắc
+  },
+});

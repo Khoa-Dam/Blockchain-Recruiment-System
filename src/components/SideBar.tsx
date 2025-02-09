@@ -16,26 +16,19 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useRef } from "react";
+import { useAuthCheck } from "@/hooks/useAuthCheck";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   onClose?: () => void;
 }
 
-const menuItems = [
-  { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-  { label: "Employee", icon: Users, href: "/dashboard/employee" },
-  { label: "Recruitment", icon: UserPlus, href: "/dashboard/recruitment" },
-  { label: "Payroll", icon: DollarSign, href: "/dashboard/payroll" },
-  { label: "Schedule", icon: Calendar, href: "/dashboard//schedule" },
-];
-
-const departments = [
-  { label: "Business and Marketing", color: "bg-blue-500" },
-  { label: "Design", color: "bg-green-500" },
-  { label: "Project Manager", color: "bg-orange-500" },
-  { label: "Human Resource", color: "bg-purple-500" },
-  { label: "Development", color: "bg-blue-500" },
-];
+// const departments = [
+//   { label: "Business and Marketing", color: "bg-blue-500" },
+//   { label: "Design", color: "bg-green-500" },
+//   { label: "Project Manager", color: "bg-orange-500" },
+//   { label: "Human Resource", color: "bg-purple-500" },
+//   { label: "Development", color: "bg-blue-500" },
+// ];
 
 const otherItems = [
   { label: "Settings", icon: Settings, href: "/settings" },
@@ -44,8 +37,17 @@ const otherItems = [
 
 // ... existing code ...
 export function Sidebar({ className, onClose }: SidebarProps) {
+  const { address } = useAuthCheck();
   const pathname = usePathname();
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const menuItems = [
+    { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
+    { label: "Profile", icon: Users, href: `/profile/${address}` },
+    { label: "Recruitment", icon: UserPlus, href: "/recruitment" },
+    { label: "Payroll", icon: DollarSign, href: "/payroll" },
+    { label: "Schedule", icon: Calendar, href: "/schedule" },
+  ];
 
   // Handle click outside
   useEffect(() => {
@@ -104,11 +106,11 @@ export function Sidebar({ className, onClose }: SidebarProps) {
           </div>
 
           {/* Departments */}
-          <div>
-            <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">
+          {/* <div> */}
+          {/* <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">
               DEPARTMENT
-            </h4>
-            <div className="space-y-1">
+            </h4> */}
+          {/* <div className="space-y-1">
               {departments.map(({ label, color }) => (
                 <Button
                   key={label}
@@ -119,8 +121,8 @@ export function Sidebar({ className, onClose }: SidebarProps) {
                   {label}
                 </Button>
               ))}
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
 
           {/* Other */}
           <div>
