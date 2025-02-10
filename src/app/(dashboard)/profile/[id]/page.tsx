@@ -153,7 +153,7 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center mb-6">
             <div className="w-24 h-24 relative rounded-full overflow-hidden mb-3 border-4 border-primary">
               <Image
-                src={formData.avatar || "/default-avatar.png"}
+                src={formData.avatar || ""}
                 alt="Profile"
                 fill
                 className="object-cover"
