@@ -46,7 +46,7 @@ export function Sidebar({ className, onClose }: SidebarProps) {
     { label: "Profile", icon: Users, href: `/profile/${address}` },
     { label: "Recruitment", icon: UserPlus, href: "/recruitment" },
     { label: "Payroll", icon: DollarSign, href: "/payroll" },
-    { label: "Schedule", icon: Calendar, href: "/schedule" },
+    { label: "Jobs", icon: Calendar, href: "/jobs" },
   ];
 
   // Handle click outside
@@ -68,7 +68,7 @@ export function Sidebar({ className, onClose }: SidebarProps) {
     <div
       ref={sidebarRef}
       className={cn(
-        "flex flex-col h-screen border-r bg-white w-[240px] lg:w-[300px] z-50",
+        "flex flex-col h-screen border-r bg-white w-[240px] lg:w-[240px] z-50",
         className
       )}
     >

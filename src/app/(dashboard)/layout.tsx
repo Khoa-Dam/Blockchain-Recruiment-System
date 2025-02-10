@@ -25,35 +25,33 @@ export default function DashboardLayout({
   const router = useRouter();
 
   useEffect(() => {
-    // Chỉ chuyển hướng khi không có kết nối
     if (!isLoading && !isConnected) {
       router.push("/");
     }
   }, [isConnected, isLoading, router]);
 
-  // Hiển thị loading khi đang kiểm tra
+  useEffect(() => {
+    if (
+      isConnected &&
+      !hasProfile &&
+      !window.location.pathname.includes("/profile/")
+    ) {
+      router.push(`/profile/${address}`);
+    }
+  }, [isConnected, hasProfile, address, router]);
+
   if (isLoading) {
     return <LoadingSpinner />;
   }
 
-  // Chỉ render layout khi đã kết nối
   if (!isConnected) {
     return <LoadingSpinner />;
-  }
-
-  if (
-    isConnected &&
-    !hasProfile &&
-    !window.location.pathname.includes("/profile/")
-  ) {
-    router.push(`/profile/${address}`);
-    return <div>Redirecting to profile creation...</div>;
   }
 
   return (
     <div className="flex flex-col h-screen">
       {/* Header */}
-      <header className="flex items-center justify-between p-2 sm:p-4 border-b">
+      <header className="flex items-center justify-between p-2 sm:p-4 border-b bg-white">
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -64,19 +62,19 @@ export default function DashboardLayout({
           <div className="p-2 sm:p-4">
             <div className="flex items-center gap-1 sm:gap-2">
               <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 rounded flex items-center justify-center text-white font-bold">
-                B
+                K
               </div>
               <div>
                 <h2 className="text-sm sm:text-base font-semibold">BordUp™</h2>
               </div>
             </div>
-            <div className="mt-1">
+            {/* <div className="mt-1">
               <h3 className="text-xs sm:text-sm font-medium">
                 {address
                   ? `${address.slice(0, 6)}...${address.slice(-4)}`
                   : "Rocks Company"}
               </h3>
-            </div>
+            </div> */}
           </div>
         </div>
         <div>
@@ -98,7 +96,9 @@ export default function DashboardLayout({
           }`}
           onClose={() => setIsSidebarOpen(false)}
         />
-        <main className="flex-1 p-4 sm:p-8 overflow-auto">{children}</main>
+        <main className="flex-1 p-4 sm:p-8 overflow-auto bg-background">
+          {children}
+        </main>
       </div>
     </div>
   );

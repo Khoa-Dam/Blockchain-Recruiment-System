@@ -44,6 +44,7 @@ export default function ProfilePage() {
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
 
   useEffect(() => {
+    console.log("Check fetch", loadProfile);
     const fetchProfile = async () => {
       if (hasProfile) {
         await loadProfile();
@@ -51,9 +52,10 @@ export default function ProfilePage() {
     };
 
     fetchProfile();
-  }, [hasProfile, loadProfile]);
+  }, [hasProfile]);
 
   useEffect(() => {
+    console.log("asdasdas check set", profile);
     if (profile) {
       setFormData({
         fullName: profile.fullName || "",
@@ -80,6 +82,7 @@ export default function ProfilePage() {
   const handleEditToggle = () => {
     console.log("Toggling edit state. Current state:", isEditing);
     setIsEditing((prev) => !prev);
+    console.log(isEditing);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -175,6 +178,7 @@ export default function ProfilePage() {
                     setFormData({ ...formData, fullName: e.target.value })
                   }
                   required
+                  className="bg-[#F9F9F9]"
                 />
               </div>
 
