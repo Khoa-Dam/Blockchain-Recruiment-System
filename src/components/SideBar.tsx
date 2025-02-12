@@ -1,6 +1,7 @@
 "use client";
+import type * as React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation"; // Import usePathname
+import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
@@ -10,67 +11,79 @@ import {
   Settings,
   HelpCircle,
   X,
+  GalleryVerticalEnd,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+} from "@/components/ui/sidebar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useEffect, useRef } from "react";
 import { useAuthCheck } from "@/hooks/useAuthCheck";
 
-interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
+interface SidebarProps extends React.ComponentProps<typeof Sidebar> {
   onClose?: () => void;
 }
 
-// const departments = [
-//   { label: "Business and Marketing", color: "bg-blue-500" },
-//   { label: "Design", color: "bg-green-500" },
-//   { label: "Project Manager", color: "bg-orange-500" },
-//   { label: "Human Resource", color: "bg-purple-500" },
-//   { label: "Development", color: "bg-blue-500" },
-// ];
-
-const otherItems = [
-  { label: "Settings", icon: Settings, href: "/settings" },
-  { label: "Help Center", icon: HelpCircle, href: "/help-center" },
-];
-
-// ... existing code ...
-export function Sidebar({ className, onClose }: SidebarProps) {
+export function AppSidebar({ className, onClose, ...props }: SidebarProps) {
   const { address } = useAuthCheck();
   const pathname = usePathname();
   const sidebarRef = useRef<HTMLDivElement>(null);
 
-  const menuItems = [
-    { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-    { label: "Profile", icon: Users, href: `/profile/${address}` },
-    { label: "Recruitment", icon: UserPlus, href: "/recruitment" },
-    { label: "Payroll", icon: DollarSign, href: "/payroll" },
-    { label: "Jobs", icon: Calendar, href: "/jobs" },
-  ];
-
-  // Handle click outside
   useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         sidebarRef.current &&
         !sidebarRef.current.contains(event.target as Node)
       ) {
         onClose?.();
       }
-    }
+    };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [onClose]);
 
+  const data = {
+    navMain: [
+      {
+        title: "Main Menu",
+        items: [
+          { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
+          { title: "Profile", icon: Users, url: `/profile/${address}` },
+          { title: "Recruitment", icon: UserPlus, url: "/recruitment" },
+          { title: "Payroll", icon: DollarSign, url: "/payroll" },
+          { title: "Jobs", icon: Calendar, url: "/jobs" },
+        ],
+      },
+      {
+        title: "Other",
+        items: [
+          { title: "Settings", icon: Settings, url: "/settings" },
+          { title: "Help Center", icon: HelpCircle, url: "/help-center" },
+        ],
+      },
+    ],
+  };
+
   return (
-    <div
+    <Sidebar
       ref={sidebarRef}
       className={cn(
         "flex flex-col h-screen border-r bg-white w-[240px] lg:w-[240px] z-50",
         className
       )}
+      {...props}
     >
       {/* Close button - only show on mobile */}
       <button
@@ -79,73 +92,53 @@ export function Sidebar({ className, onClose }: SidebarProps) {
       >
         <X size={20} />
       </button>
-      <ScrollArea className="flex-1">
-        <div className="p-2 sm:p-4 space-y-4 sm:space-y-6">
-          {/* Main Menu */}
-          <div>
-            <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">
-              MAIN MENU
-            </h4>
-            <div className="space-y-1">
-              {menuItems.map(({ label, icon: Icon, href }) => (
-                <Link key={label} href={href} passHref>
-                  <Button
-                    variant={pathname === href ? "secondary" : "ghost"}
-                    className={cn(
-                      "w-full justify-start gap-2 text-xs sm:text-sm",
-                      pathname === href &&
-                        "bg-blue-50 text-blue-600 hover:bg-blue-100"
-                    )}
-                  >
-                    <Icon size={16} className="sm:w-5 sm:h-5" />
-                    {label}
-                  </Button>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* Departments */}
-          {/* <div> */}
-          {/* <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">
-              DEPARTMENT
-            </h4> */}
-          {/* <div className="space-y-1">
-              {departments.map(({ label, color }) => (
-                <Button
-                  key={label}
-                  variant="ghost"
-                  className="w-full justify-start gap-2 text-xs sm:text-sm"
-                >
-                  <span className={`w-2 h-2 rounded-full ${color}`} />
-                  {label}
-                </Button>
-              ))}
-            </div> */}
-          {/* </div> */}
-
-          {/* Other */}
-          <div>
-            <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2">
-              OTHER
-            </h4>
-            <div className="space-y-1">
-              {otherItems.map(({ label, icon: Icon, href }) => (
-                <Link key={label} href={href} passHref>
-                  <Button
-                    variant={pathname === href ? "secondary" : "ghost"}
-                    className="w-full justify-start gap-2 text-xs sm:text-sm"
-                  >
-                    <Icon size={16} className="sm:w-5 sm:h-5" />
-                    {label}
-                  </Button>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </div>
-      </ScrollArea>
-    </div>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton size="lg" asChild>
+              <Link href="/dashboard">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
+                  <GalleryVerticalEnd className="size-4" />
+                </div>
+                <div className="flex flex-col gap-0.5 leading-none">
+                  <span className="font-semibold">BordUp™</span>
+                </div>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
+      <SidebarContent>
+        <ScrollArea className="flex-1">
+          {data.navMain.map((section) => (
+            <SidebarGroup key={section.title}>
+              <h4 className="text-xs sm:text-sm font-medium text-muted-foreground mb-2 px-4 pt-4">
+                {section.title.toUpperCase()}
+              </h4>
+              <SidebarMenu>
+                {section.items.map((item) => (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={pathname === item.url}>
+                      <Link
+                        href={item.url}
+                        className={cn(
+                          "flex items-center gap-2",
+                          pathname === item.url &&
+                            "bg-blue-50 text-blue-600 hover:bg-blue-100"
+                        )}
+                      >
+                        <item.icon size={16} className="sm:w-5 sm:h-5" />
+                        {item.title}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarGroup>
+          ))}
+        </ScrollArea>
+      </SidebarContent>
+      <SidebarRail />
+    </Sidebar>
   );
 }
-// ... existing code ...
