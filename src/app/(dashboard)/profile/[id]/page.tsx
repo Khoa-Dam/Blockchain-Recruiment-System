@@ -13,6 +13,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Github, Linkedin, Loader2 } from "lucide-react";
 import { ClipLoader } from "react-spinners";
+import axios from "axios";
+import Loading from "@/components/Loading";
+import image from "@/../public/avatars/image.png";
+import { ToastAction } from "@/components/ui/toast";
 
 export default function ProfilePage() {
   const params = useParams();
@@ -44,7 +48,6 @@ export default function ProfilePage() {
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
 
   useEffect(() => {
-    console.log("Check fetch", loadProfile);
     const fetchProfile = async () => {
       if (hasProfile) {
         await loadProfile();
@@ -55,7 +58,6 @@ export default function ProfilePage() {
   }, [hasProfile]);
 
   useEffect(() => {
-    console.log("asdasdas check set", profile);
     if (profile) {
       setFormData({
         fullName: profile.fullName || "",
@@ -72,11 +74,7 @@ export default function ProfilePage() {
   }, [profile]);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader2 className="w-8 h-8 animate-spin" />
-      </div>
-    );
+    return <Loading />;
   }
 
   const handleEditToggle = () => {
@@ -129,11 +127,11 @@ export default function ProfilePage() {
       });
 
       setIsEditing(false);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Failed to update profile",
+        description: error.response?.data?.message || error.message,
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
         variant: "destructive",
       });
     } finally {
@@ -153,7 +151,7 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center mb-6">
             <div className="w-24 h-24 relative rounded-full overflow-hidden mb-3 border-4 border-primary">
               <Image
-                src={formData.avatar || ""}
+                src={formData.avatar || image}
                 alt="Profile"
                 fill
                 className="object-cover"

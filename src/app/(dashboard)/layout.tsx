@@ -11,6 +11,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/toaster";
 
 // Loading component
 const LoadingSpinner = () => (
@@ -69,6 +70,7 @@ export default function DashboardLayout({
             <main className="flex-1 p-4 sm:p-8 overflow-auto bg-background">
               {children}
             </main>
+            <Toaster />
           </SidebarInset>
         </SidebarProvider>
       </div>
