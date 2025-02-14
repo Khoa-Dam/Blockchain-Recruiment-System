@@ -62,7 +62,7 @@ export function AppSidebar({ className, onClose, ...props }: SidebarProps) {
           { title: "Dashboard", icon: LayoutDashboard, url: "/dashboard" },
           { title: "Profile", icon: Users, url: `/profile/${address}` },
           { title: "Recruitment", icon: UserPlus, url: "/recruitment" },
-          { title: "Payroll", icon: DollarSign, url: "/payroll" },
+          // { title: "Payroll", icon: DollarSign, url: "/payroll" },
           { title: "Jobs", icon: Calendar, url: "/jobs" },
         ],
       },
