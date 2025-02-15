@@ -34,7 +34,9 @@ export default function RecruitmentPage() {
   const fetchJobs = async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`http://localhost:8081/api/jobs`);
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/jobs`
+      );
       console.log("check data All Jobs", response.data.data);
       setJobs(response.data.data);
     } catch (error: any) {

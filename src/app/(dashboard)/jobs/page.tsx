@@ -39,7 +39,9 @@ export default function JobsPage() {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get("http://localhost:8081/api/jobs");
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/jobs`
+      );
       setJobs(response.data.data);
     } catch (error: any) {
       toast({
@@ -56,7 +58,7 @@ export default function JobsPage() {
   const createJob = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8081/api/jobs/create-job",
+        `${process.env.NEXT_PUBLIC_API_URL}/api/jobs/create-job`,
         newJob
       );
       setJobs([...jobs, response.data]);
@@ -75,7 +77,7 @@ export default function JobsPage() {
   const checkApplication = async (jobId: string, walletAddress: string) => {
     try {
       const response = await axios.get(
-        `http://localhost:8081/api/check-application/${jobId}/${walletAddress}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/check-application/${jobId}/${walletAddress}`
       );
       return response.data; // Trả về kết quả kiểm tra
     } catch (error: any) {
@@ -116,7 +118,7 @@ export default function JobsPage() {
       return;
     }
     try {
-      await axios.post("http://localhost:8081/api/apply/job", {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/apply/job`, {
         jobId,
         walletAddress: address,
       });
