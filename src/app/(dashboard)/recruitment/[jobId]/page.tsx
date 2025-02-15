@@ -19,7 +19,7 @@ export default function PageAllProfileByJobs() {
     async (jobId: string) => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/applications?jobId=${jobId}`
+          `${process.env.NEXT_PUBLIC_API_URL}api/applications?jobId=${jobId}`
         );
 
         const walletAddresses = response.data.walletAddresses || [];
